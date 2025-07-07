@@ -1,0 +1,93 @@
+{% extends "layout.html" %} {% block content %}
+
+<div class="card shadow-sm mb-4 border-0">
+  <div class="card-body">
+    <h4 class="fw-bold text-dark mb-2">PERHITUNGAN ALTERNATIF</h4>
+    <p class="text-muted mb-0">PERHITUNGAN METODE PSI</p>
+  </div>
+</div>
+
+<!-- Tabel Penilaian Alternatif -->
+<div class="card shadow-sm mb-4 border-0">
+  <div class="card-body">
+    <h5 class="fw-semibold mb-3">Tabel Penilaian Alternatif</h5>
+    <div class="table-responsive">
+      <table class="table table-hover table-borderless align-middle">
+        <thead class="bg-gradient bg-primary text-white">
+          <tr>
+            <th class="py-3 ps-4">Pupuk</th>
+            {% for k in kriteria_list %}
+            <th class="py-3">{{ k[1] }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for pid, data in pupuk_dict.items() %}
+          <tr class="border-bottom">
+            <td class="ps-4 fw-medium">{{ data.nama }}</td>
+            {% for k in kriteria_list %}
+            <td>{{ data.nilai[k[0]] }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Tabel Normalisasi Matriks -->
+<div class="card shadow-sm mb-4 border-0">
+  <div class="card-body">
+    <h5 class="fw-semibold mb-3">Tabel Normalisasi Matriks</h5>
+    <div class="table-responsive">
+      <table class="table table-hover table-borderless align-middle">
+        <thead class="bg-gradient bg-primary text-white">
+          <tr>
+            <th class="py-3 ps-4">Pupuk</th>
+            {% for k in kriteria_list %}
+            <th class="py-3">{{ k[1] }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for pid, data in normalisasi.items() %}
+          <tr class="border-bottom">
+            <td class="ps-4 fw-medium">{{ pupuk_dict[pid].nama }}</td>
+            {% for k in kriteria_list %}
+            <td>{{ '%.4f'|format(data[k[0]]) }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Tabel Rata-rata Nilai -->
+<div class="card shadow-sm mb-4 border-0">
+  <div class="card-body">
+    <h5 class="fw-semibold mb-3">Tabel Rata-rata Nilai</h5>
+    <div class="table-responsive">
+      <table class="table table-hover table-borderless align-middle">
+        <thead class="bg-gradient bg-primary text-white">
+          <tr>
+            <th class="py-3 ps-4">Pupuk</th>
+            <th class="py-3">Nilai Preferensi (PSI)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pid, val in rata_rata.items() %}
+          <tr class="border-bottom">
+            <td class="ps-4 fw-medium">{{ pupuk_dict[pid].nama }}</td>
+            <td>{{ '%.4f'|format(val) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

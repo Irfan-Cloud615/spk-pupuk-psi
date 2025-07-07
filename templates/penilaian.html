@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <h4 class="fw-bold text-dark mb-3">PENILAIAN ALTERNATIF</h4>
+        
+        <form method="get" class="mb-4">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <label class="form-label fw-medium">Filter Kategori Pupuk</label>
+                    <select name="kategori" class="form-select shadow-sm" onchange="this.form.submit()">
+                        <option value="">-- Pilih Kategori --</option>
+                        <option value="pertumbuhan" {% if kategori == 'pertumbuhan' %}selected{% endif %}>Pertumbuhan</option>
+                        <option value="buah" {% if kategori == 'buah' %}selected{% endif %}>Buah</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if kategori and fertilizers %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle bg-white rounded-3 overflow-hidden shadow-sm">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th class="py-3 ps-4">Pupuk</th>
+                <th class="py-3">Kriteria</th>
+                <th class="py-3">Nilai/Sub-Kriteria</th>
+                <th class="py-3 pe-4">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in fertilizers %}
+                {% for k in kriteria %}
+                    <tr class="border-top">
+                        <td class="ps-4 fw-medium">{{ p[1] }}</td>
+                        <td>{{ k[1] }}</td>
+                        <td>
+                            <form method="POST" class="d-flex align-items-center">
+                                <input type="hidden" name="fertilizer_id" value="{{ p[0] }}">
+                                <input type="hidden" name="criteria_id" value="{{ k[0] }}">
+
+                                {% set key = p[0]|string + '_' + k[0]|string %}
+                                {% set sub_list = sub_kriteria|selectattr('1', 'equalto', k[0])|list %}
+
+                                {% if sub_list %}
+                                    <select name="nilai" class="form-select shadow-sm me-2" required>
+                                        <option value="">-- Pilih --</option>
+                                        {% for s in sub_list %}
+                                        <option value="{{ s[3] }}" {% if nilai_map[key] and nilai_map[key].nilai == s[3] %}selected{% endif %}>
+                                            {{ s[2] }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                    <input type="hidden" name="sub_criteria_id" value="{{ nilai_map[key].sub_id if nilai_map[key] else '' }}">
+                                {% else %}
+                                    <input type="number" name="nilai" class="form-control shadow-sm me-2" step="0.01"
+                                           value="{{ nilai_map[key].nilai if nilai_map[key] else '' }}" required>
+                                {% endif %}
+                                <button type="submit" class="btn btn-primary btn-sm shadow-sm">
+                                    <i class="fas fa-save me-1"></i>Simpan
+                                </button>
+                            </form>
+                        </td>
+                        <td class="pe-4">
+                            {% if nilai_map[key] %}
+                            <a href="{{ url_for('hapus_penilaian', fertilizer_id=p[0], criteria_id=k[0], kategori=kategori) }}" 
+                               class="btn btn-danger btn-sm shadow-sm"
+                               onclick="return confirm('Yakin ingin hapus penilaian ini?')">
+                               <i class="fas fa-trash-alt me-1"></i>Hapus
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% elif kategori %}
+<div class="alert alert-warning shadow-sm">
+    <i class="fas fa-exclamation-circle me-2"></i>Tidak ada pupuk pada kategori ini.
+</div>
+{% endif %}
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+{% endblock %}

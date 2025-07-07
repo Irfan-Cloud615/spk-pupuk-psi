@@ -1,0 +1,93 @@
+{% extends "layout.html" %} {% block content %}
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body">
+    <h4 class="fw-bold text-dark mb-4">Edit Alternatif Pupuk</h4>
+    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Nama Pupuk</label>
+        <input
+          type="text"
+          name="nama"
+          class="form-control shadow-sm rounded-3"
+          value="{{ pupuk[1] }}"
+          required
+        />
+        <div class="invalid-feedback">Harap isi nama pupuk</div>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label fw-medium">Deskripsi</label>
+        <textarea name="deskripsi" class="form-control shadow-sm rounded-3" rows="3" required>{{ pupuk[2] }}</textarea>
+        <div class="invalid-feedback">Harap isi deskripsi</div>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label fw-medium">Satuan</label>
+        <input
+          type="text"
+          name="satuan"
+          class="form-control shadow-sm rounded-3"
+          value="{{ pupuk[3] }}"
+          required
+        />
+        <div class="invalid-feedback">Harap isi satuan</div>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label fw-medium">Kategori</label>
+        <select name="kategori" class="form-select shadow-sm rounded-3" required>
+          <option value="pertumbuhan" {% if pupuk[7] == 'pertumbuhan' %}selected{% endif %}>Pertumbuhan</option>
+          <option value="buah" {% if pupuk[7] == 'buah' %}selected{% endif %}>Buah</option>
+        </select>
+      </div>
+      
+      <div class="mb-4">
+        <label class="form-label fw-medium">Ganti Gambar (opsional)</label>
+        <input type="file" name="gambar" class="form-control shadow-sm rounded-3" />
+        {% if pupuk[4] %}
+        <div class="mt-3">
+          <p class="mb-2 text-muted">Gambar saat ini:</p>
+          <img
+            src="{{ url_for('static', filename='uploads/' ~ pupuk[4]) }}"
+            width="100"
+            class="rounded-3 border shadow-sm"
+          />
+        </div>
+        {% endif %}
+      </div>
+      
+      <div class="d-flex gap-3">
+        <button type="submit" class="btn btn-primary px-4 py-2 shadow-sm rounded-pill">
+          <i class="fas fa-save me-2"></i>Update
+        </button>
+        <a href="{{ url_for('alternatif') }}" class="btn btn-outline-secondary px-4 py-2 shadow-sm rounded-pill">
+          <i class="fas fa-arrow-left me-2"></i>Kembali
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- Form validation script -->
+<script>
+// Form validation
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+{% endblock %}

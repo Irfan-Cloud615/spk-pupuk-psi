@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body">
+    <h4 class="fw-bold text-dark mb-4">Edit Sub-Kriteria</h4>
+    <form method="POST" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Pilih Kriteria</label>
+        <select name="criteria_id" class="form-select shadow-sm rounded-3" required>
+          {% for k in kriteria %}
+          <option value="{{ k[0] }}" {% if k[0] == sub[1] %}selected{% endif %}>{{ k[1] }}</option>
+          {% endfor %}
+        </select>
+        <div class="invalid-feedback">Harap pilih kriteria</div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Nama Sub-Kriteria</label>
+        <input type="text" name="nama" class="form-control shadow-sm rounded-3" value="{{ sub[2] }}" required>
+        <div class="invalid-feedback">Harap isi nama sub-kriteria</div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-medium">Nilai Bobot</label>
+        <input type="number" name="bobot" class="form-control shadow-sm rounded-3" value="{{ sub[3] }}" step="0.01" required>
+        <div class="invalid-feedback">Harap isi nilai bobot</div>
+      </div>
+      <div class="d-flex gap-3">
+        <button type="submit" class="btn btn-primary px-4 py-2 shadow-sm rounded-pill">
+          <i class="fas fa-save me-2"></i>Update
+        </button>
+        <a href="{{ url_for('sub_kriteria') }}" class="btn btn-outline-secondary px-4 py-2 shadow-sm rounded-pill">
+          <i class="fas fa-arrow-left me-2"></i>Kembali
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- Form validation script -->
+<script>
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    var forms = document.getElementsByClassName('needs-validation');
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+{% endblock %}
